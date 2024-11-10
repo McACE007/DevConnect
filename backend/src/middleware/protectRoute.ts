@@ -21,12 +21,12 @@ const protectRoute = async (req: Request, res: Response, next: NextFunction) => 
         const token = req.cookies.jwt; 
 
         if(!token)
-            res.status(401).json({error: "Unauthorized - No token provided"});
+            return res.status(401).json({error: "Unauthorized - No token provided"});
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as DecodedToken;
 
          if(!decoded)
-            res.status(401).json({error: "Unauthorized - Invalid Token"});
+            return res.status(401).json({error: "Unauthorized - Invalid Token"});
 
          const user = await db.user.findUnique({
             where: {id: decoded.userId},
