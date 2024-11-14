@@ -53,7 +53,7 @@ export const sendMessage = async (req: Request, res: Response) => {
     if (receiverSocketId)
       io.to(receiverSocketId).emit("newMessage", newMessage);
 
-    return res.status(201).json(newMessage);
+    res.status(201).json(newMessage);
   } catch (error: any) {
     console.error("Error in sendMessage controller: ", error.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -80,7 +80,10 @@ export const getMessages = async (req: Request, res: Response) => {
       },
     });
 
-    if (!conversation) return res.status(200).json([]);
+    if (!conversation) {
+      res.status(200).json([]);
+      return;
+    }
 
     res.status(200).json(conversation.messages);
   } catch (error: any) {
